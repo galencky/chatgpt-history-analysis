@@ -1,0 +1,7 @@
+# Ignore all files in the chatgpt-history-analysis\data directory
+/Downloads/chatgpt-history-analysis/data/*
+/data/
+.env
+.dockerignore
+/drop_zip_here
+/output

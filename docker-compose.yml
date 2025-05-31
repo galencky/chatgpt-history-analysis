@@ -1,0 +1,11 @@
+services:
+  chatgpt-history-analyzer:
+    build: .
+    image: chatgpt-history-analyzer:latest
+    container_name: chatgpt-analyzer
+    environment:
+      - TZ=Asia/Taipei
+    volumes:
+      - ./drop_zip_here:/app/drop_zip_here       # ✨ hot-folder
+      - ./output:/app/output                     # ✨ archived results
+      - ./.env:/app/.env:ro                      # ✅ FIXED: bind root-level .env file
