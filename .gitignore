@@ -5,3 +5,4 @@
 .dockerignore
 /drop_zip_here
 /output
+*.tar
