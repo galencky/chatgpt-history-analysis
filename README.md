@@ -177,7 +177,7 @@ MIT
 **Pull requests and suggestions welcome!**
 If you found this useful, [star ⭐️ the repo](#) or open an issue!
 
-Author: Kuan-Yuan Chen, M.D.
+Author: 陳冠元 Kuan-Yuan Chen, M.D.
 Email: galen147258369@gmail.com
 
 ---
