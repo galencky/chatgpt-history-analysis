@@ -66,23 +66,27 @@ def extract_flattened_data(conversations):
 
             # 1) Assistant Thought Blocks
             if content_obj.get("content_type") == "thoughts":
-                for t in content_obj.get("thoughts", []):
-                    row = base.copy()
-                    row.update({
-                        "content": t.get("content"),
-                        "type":    "thought",
-                        "summary": t.get("summary")
-                    })
-                    rows.append(row)
+                thoughts = content_obj.get("thoughts", [])
+                if thoughts is not None:
+                    for t in thoughts:
+                        row = base.copy()
+                        row.update({
+                            "content": t.get("content"),
+                            "type":    "thought",
+                            "summary": t.get("summary")
+                        })
+                        rows.append(row)
 
             # 2) Search Queries from metadata
-            for q in metadata.get("search_queries", []):
-                row = base.copy()
-                row.update({
-                    "content": q.get("q", ""),
-                    "type":    "search_query"
-                })
-                rows.append(row)
+            search_queries = metadata.get("search_queries", [])
+            if search_queries is not None:
+                for q in search_queries:
+                    row = base.copy()
+                    row.update({
+                        "content": q.get("q", ""),
+                        "type":    "search_query"
+                    })
+                    rows.append(row)
 
             # 3) Code-embedded operations (search_query & open_url)
             if content_obj.get("content_type") == "code":
@@ -91,20 +95,24 @@ def extract_flattened_data(conversations):
                 except (json.JSONDecodeError, TypeError):
                     parsed = {}
                 if isinstance(parsed, dict):
-                    for q in parsed.get("search_query", []):
-                        row = base.copy()
-                        row.update({
-                            "content": q.get("q", ""),
-                            "type":    "search_query"
-                        })
-                        rows.append(row)
-                    for o in parsed.get("open", []):
-                        row = base.copy()
-                        row.update({
-                            "content": o.get("ref_id", ""),
-                            "type":    "open_url"
-                        })
-                        rows.append(row)
+                    search_query = parsed.get("search_query", [])
+                    if search_query is not None:
+                        for q in search_query:
+                            row = base.copy()
+                            row.update({
+                                "content": q.get("q", ""),
+                                "type":    "search_query"
+                            })
+                            rows.append(row)
+                    open_urls = parsed.get("open", [])
+                    if open_urls is not None:
+                        for o in open_urls:
+                            row = base.copy()
+                            row.update({
+                                "content": o.get("ref_id", ""),
+                                "type":    "open_url"
+                            })
+                            rows.append(row)
 
             # 4) Tether Quotes
             if content_obj.get("content_type") == "tether_quote":
@@ -118,14 +126,16 @@ def extract_flattened_data(conversations):
 
             # 5) Extended webpage references
             if content_obj.get("content_type") == "webpage_extended":
-                for ref in content_obj.get("content_references", []):
-                    row = base.copy()
-                    row.update({
-                        "content": ref.get("snippet", ""),
-                        "type":    "webpage_extended",
-                        "summary": ref.get("attribution", "")
-                    })
-                    rows.append(row)
+                content_refs = content_obj.get("content_references", [])
+                if content_refs is not None:
+                    for ref in content_refs:
+                        row = base.copy()
+                        row.update({
+                            "content": ref.get("snippet", ""),
+                            "type":    "webpage_extended",
+                            "summary": ref.get("attribution", "")
+                        })
+                        rows.append(row)
 
         if (conv_idx + 1) % 100 == 0 or conv_idx == len(conversations) - 1:
             print(f"  Processed {conv_idx + 1} / {len(conversations)} conversations for web/thought/code extraction")

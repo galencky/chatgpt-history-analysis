@@ -6,3 +6,6 @@
 /drop_zip_here
 /output
 *.tar
+.venv
+.claude
+/src
